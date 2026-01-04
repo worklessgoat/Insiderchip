@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InsiderChip - Real-Time Market Intelligence</title>
+    <title>InsiderChip - Live Market Intelligence</title>
     <style>
         * {
             margin: 0;
@@ -18,324 +18,337 @@
     }
 
     body {
-        font-family: 'Courier New', Courier, monospace;
-        background: #1e1e1e;
+        font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+        background: #000000;
         color: #d4d4d4;
         overflow-x: hidden;
-        font-size: 14px;
     }
 
-    .line-numbers {
+    .terminal-dots {
         position: fixed;
-        left: 0;
-        top: 80px;
-        bottom: 0;
-        width: 50px;
-        background: #252526;
-        border-right: 1px solid #3e3e42;
-        color: #858585;
-        padding: 20px 10px;
-        font-size: 12px;
-        line-height: 22px;
-        z-index: 100;
-        overflow: hidden;
+        top: 15px;
+        left: 20px;
+        display: flex;
+        gap: 8px;
+        z-index: 1001;
     }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
 
     .header {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        background: #252526;
-        border-bottom: 1px solid #3e3e42;
+        background: #000000;
+        border-bottom: 1px solid #1a1a1a;
         z-index: 1000;
-        padding: 0;
-        height: 80px;
-    }
-
-    .tab-bar {
-        display: flex;
-        align-items: flex-end;
-        height: 35px;
-        background: #2d2d30;
-        border-bottom: 1px solid #3e3e42;
-        padding-left: 60px;
-    }
-
-    .tab {
-        padding: 8px 16px;
-        background: #1e1e1e;
-        color: #969696;
-        border-right: 1px solid #3e3e42;
-        font-size: 13px;
-        cursor: pointer;
-        position: relative;
-    }
-
-    .tab.active {
-        color: #ffffff;
-    }
-
-    .tab.active::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: #007acc;
+        padding: 50px 20px 15px 20px;
     }
 
     .header-content {
-        height: 45px;
-        padding: 0 20px 0 70px;
+        max-width: 1800px;
+        margin: 0 auto;
         display: flex;
-        align-items: center;
         justify-content: space-between;
-    }
-
-    .breadcrumb {
-        display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 13px;
-        color: #cccccc;
     }
 
-    .breadcrumb-item {
-        color: #cccccc;
-    }
-
-    .breadcrumb-sep {
-        color: #6e6e6e;
-    }
-
-    .status-bar {
+    .logo-section {
         display: flex;
         align-items: center;
         gap: 15px;
+    }
+
+    .logo {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .logo-bracket {
+        color: #569cd6;
+    }
+
+    .logo-text {
+        color: #4ec9b0;
+    }
+
+    .status-section {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .live-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        background: rgba(78, 201, 176, 0.1);
+        border: 1px solid #4ec9b0;
+        border-radius: 4px;
         font-size: 12px;
-    }
-
-    .status-item {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        color: #cccccc;
-    }
-
-    .live-indicator {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 3px 8px;
-        background: rgba(0, 122, 204, 0.2);
-        border-radius: 3px;
+        color: #4ec9b0;
     }
 
     .live-dot {
-        width: 6px;
-        height: 6px;
+        width: 8px;
+        height: 8px;
         background: #4ec9b0;
         border-radius: 50%;
         animation: pulse 2s ease-in-out infinite;
     }
 
     @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.4; }
+        0%, 100% { opacity: 1; box-shadow: 0 0 8px #4ec9b0; }
+        50% { opacity: 0.4; box-shadow: 0 0 20px #4ec9b0; }
     }
 
-    .main-container {
-        margin-top: 80px;
-        margin-left: 60px;
-        padding: 20px 40px;
-        max-width: 1800px;
-    }
-
-    .code-line {
-        font-family: 'Courier New', Courier, monospace;
-        margin: 8px 0;
-        line-height: 22px;
-    }
-
-    .comment {
-        color: #6a9955;
-    }
-
-    .keyword {
-        color: #569cd6;
-    }
-
-    .string {
-        color: #ce9178;
-    }
-
-    .function {
-        color: #dcdcaa;
-    }
-
-    .variable {
-        color: #9cdcfe;
-    }
-
-    .category-section {
-        margin: 30px 0;
-    }
-
-    .category-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 12px;
-        margin: 15px 0;
-    }
-
-    .category-card {
-        background: #2d2d30;
-        border: 1px solid #3e3e42;
+    .settings-btn {
+        background: transparent;
+        border: 1px solid #333;
+        color: #d4d4d4;
+        padding: 8px 16px;
         border-radius: 4px;
-        padding: 15px;
         cursor: pointer;
-        transition: all 0.2s ease;
-        position: relative;
+        font-family: inherit;
+        font-size: 12px;
+        transition: all 0.2s;
     }
 
-    .category-card:hover {
-        background: #333333;
-        border-color: #007acc;
+    .settings-btn:hover {
+        background: #1a1a1a;
+        border-color: #4ec9b0;
     }
 
-    .category-card.active {
-        background: #264f78;
-        border-color: #007acc;
+    .settings-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 2000;
+        display: none;
+        justify-content: center;
+        align-items: center;
     }
 
-    .category-card.active::before {
-        content: '●';
-        position: absolute;
-        left: 8px;
-        top: 8px;
+    .settings-modal.active {
+        display: flex;
+    }
+
+    .settings-panel {
+        background: #0a0a0a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 600px;
+        padding: 30px;
+    }
+
+    .settings-header {
+        font-size: 20px;
+        margin-bottom: 25px;
         color: #4ec9b0;
-        font-size: 8px;
     }
 
-    .category-icon {
-        font-size: 24px;
+    .setting-item {
+        margin-bottom: 20px;
+    }
+
+    .setting-label {
+        font-size: 13px;
+        color: #ce9178;
         margin-bottom: 8px;
         display: block;
     }
 
-    .category-name {
+    .setting-input {
+        width: 100%;
+        background: #1a1a1a;
+        border: 1px solid #333;
+        color: #d4d4d4;
+        padding: 10px;
+        border-radius: 4px;
+        font-family: inherit;
         font-size: 13px;
-        font-weight: 600;
-        margin-bottom: 4px;
-        color: #cccccc;
     }
 
-    .category-count {
-        font-size: 11px;
+    .setting-input:focus {
+        outline: none;
+        border-color: #4ec9b0;
+    }
+
+    .settings-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 25px;
+    }
+
+    .btn-save, .btn-cancel {
+        padding: 10px 20px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 13px;
+    }
+
+    .btn-save {
+        background: #4ec9b0;
+        color: #000;
+    }
+
+    .btn-cancel {
+        background: #333;
+        color: #d4d4d4;
+    }
+
+    .main-container {
+        margin-top: 120px;
+        padding: 0 40px 40px;
+        max-width: 1800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .code-line {
+        font-size: 14px;
+        line-height: 24px;
+        margin: 5px 0;
+    }
+
+    .line-number {
         color: #858585;
+        margin-right: 20px;
+        user-select: none;
+        display: inline-block;
+        width: 30px;
+        text-align: right;
+    }
+
+    .keyword { color: #c586c0; }
+    .function { color: #dcdcaa; }
+    .string { color: #ce9178; }
+    .comment { color: #6a9955; font-style: italic; }
+    .variable { color: #9cdcfe; }
+    .number { color: #b5cea8; }
+    .operator { color: #d4d4d4; }
+
+    .category-section {
+        margin: 40px 0;
+    }
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .category-card {
+        background: #0a0a0a;
+        border: 1px solid #1a1a1a;
+        border-radius: 6px;
+        padding: 20px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+    }
+
+    .category-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: transparent;
+        transition: all 0.3s;
+    }
+
+    .category-card:hover {
+        background: #111;
+        border-color: #4ec9b0;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(78, 201, 176, 0.1);
+    }
+
+    .category-card:hover::before {
+        background: linear-gradient(90deg, #4ec9b0, #569cd6);
+    }
+
+    .category-card.active {
+        background: rgba(78, 201, 176, 0.05);
+        border-color: #4ec9b0;
+    }
+
+    .category-card.active::before {
+        background: linear-gradient(90deg, #4ec9b0, #569cd6);
+    }
+
+    .category-icon {
+        font-size: 32px;
+        margin-bottom: 12px;
+        display: block;
+    }
+
+    .category-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #d4d4d4;
+        margin-bottom: 5px;
+    }
+
+    .category-source {
+        font-size: 11px;
+        color: #6a9955;
     }
 
     .news-section {
-        margin-top: 30px;
-        scroll-margin-top: 100px;
+        margin-top: 50px;
+        scroll-margin-top: 120px;
     }
 
-    .news-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-        gap: 15px;
-        margin-top: 15px;
+    .news-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
     }
 
-    .news-card {
-        background: #2d2d30;
-        border: 1px solid #3e3e42;
+    .refresh-btn {
+        background: transparent;
+        border: 1px solid #333;
+        color: #4ec9b0;
+        padding: 8px 16px;
         border-radius: 4px;
-        padding: 16px;
-        transition: all 0.2s ease;
         cursor: pointer;
-    }
-
-    .news-card:hover {
-        background: #333333;
-        border-color: #007acc;
-        transform: translateY(-2px);
-    }
-
-    .news-meta {
+        font-family: inherit;
+        font-size: 12px;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 12px;
-        font-size: 11px;
+        gap: 8px;
+        transition: all 0.2s;
     }
 
-    .news-category {
-        background: #094771;
-        color: #4fc3f7;
-        padding: 2px 8px;
-        border-radius: 3px;
-        font-weight: 600;
-        text-transform: uppercase;
+    .refresh-btn:hover {
+        background: rgba(78, 201, 176, 0.1);
+        border-color: #4ec9b0;
     }
 
-    .news-time {
-        color: #858585;
-    }
-
-    .news-headline {
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 10px;
-        line-height: 1.5;
-        color: #cccccc;
-    }
-
-    .news-description {
-        font-size: 13px;
-        color: #969696;
-        line-height: 1.6;
-        margin-bottom: 12px;
-    }
-
-    .news-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 12px;
-        border-top: 1px solid #3e3e42;
-        font-size: 11px;
-    }
-
-    .news-source {
-        color: #858585;
-    }
-
-    .news-link {
-        color: #4fc3f7;
-        text-decoration: none;
-    }
-
-    .news-link:hover {
-        text-decoration: underline;
-    }
-
-    .loading {
-        text-align: center;
-        padding: 40px;
-        color: #858585;
-    }
-
-    .spinner {
-        border: 2px solid #3e3e42;
-        border-top: 2px solid #007acc;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
+    .refresh-btn.loading {
         animation: spin 1s linear infinite;
-        margin: 0 auto 15px;
     }
 
     @keyframes spin {
@@ -343,30 +356,134 @@
         100% { transform: rotate(360deg); }
     }
 
+    .news-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+
+    .news-card {
+        background: #0a0a0a;
+        border: 1px solid #1a1a1a;
+        border-radius: 6px;
+        padding: 20px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .news-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: transparent;
+        transition: all 0.3s;
+    }
+
+    .news-card:hover {
+        background: #111;
+        border-color: #569cd6;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(86, 156, 214, 0.1);
+    }
+
+    .news-card:hover::before {
+        background: linear-gradient(90deg, #569cd6, #4ec9b0);
+    }
+
+    .news-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        font-size: 11px;
+    }
+
+    .news-category-tag {
+        background: rgba(86, 156, 214, 0.2);
+        color: #569cd6;
+        padding: 4px 10px;
+        border-radius: 3px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .news-time {
+        color: #858585;
+    }
+
+    .news-headline {
+        font-size: 16px;
+        font-weight: 600;
+        color: #d4d4d4;
+        line-height: 1.5;
+        margin-bottom: 12px;
+    }
+
+    .news-description {
+        font-size: 13px;
+        color: #969696;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    .news-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid #1a1a1a;
+        font-size: 11px;
+    }
+
+    .news-source {
+        color: #6a9955;
+    }
+
+    .news-link {
+        color: #4ec9b0;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .news-link:hover {
+        text-decoration: underline;
+    }
+
+    .loading-container {
+        text-align: center;
+        padding: 60px;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #1a1a1a;
+        border-top: 3px solid #4ec9b0;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+    }
+
     .error-message {
-        background: #5a1d1d;
-        border: 1px solid #be1100;
-        color: #f48771;
-        padding: 12px;
+        background: rgba(244, 71, 71, 0.1);
+        border: 1px solid #f44747;
+        color: #f44747;
+        padding: 15px;
         border-radius: 4px;
         margin: 20px 0;
         font-size: 13px;
     }
 
     @media (max-width: 768px) {
-        .line-numbers {
-            display: none;
-        }
-        
-        .main-container {
-            margin-left: 0;
-            padding: 20px;
-        }
-        
-        .tab-bar, .header-content {
-            padding-left: 20px;
-        }
-
         .category-grid {
             grid-template-columns: repeat(2, 1fr);
         }
@@ -380,111 +497,172 @@
 
 </head>
 <body>
-    <div class="line-numbers" id="lineNumbers"></div>
+    <div class="terminal-dots">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+    </div>
 
 ```
 <header class="header">
-    <div class="tab-bar">
-        <div class="tab active">📊 InsiderChip.markets</div>
-        <div class="tab">⚙️ Settings</div>
-    </div>
     <div class="header-content">
-        <div class="breadcrumb">
-            <span class="breadcrumb-item">INSIDERCHIP</span>
-            <span class="breadcrumb-sep">›</span>
-            <span class="breadcrumb-item">src</span>
-            <span class="breadcrumb-sep">›</span>
-            <span class="breadcrumb-item">markets</span>
+        <div class="logo-section">
+            <div class="logo">
+                <span class="logo-bracket">&lt;</span><span class="logo-text">INSIDERCHIP</span><span class="logo-bracket">/&gt;</span>
+            </div>
         </div>
-        <div class="status-bar">
-            <div class="live-indicator">
+        <div class="status-section">
+            <div class="live-badge">
                 <div class="live-dot"></div>
-                <span>LIVE</span>
+                <span>LIVE STREAMING</span>
             </div>
-            <div class="status-item">
-                <span id="newsCount">0 items</span>
-            </div>
+            <button class="settings-btn" onclick="openSettings()">⚙️ Settings</button>
         </div>
     </div>
 </header>
 
+<div class="settings-modal" id="settingsModal">
+    <div class="settings-panel">
+        <div class="settings-header">⚙️ Configuration Settings</div>
+        <div class="setting-item">
+            <label class="setting-label">Auto-Refresh Interval (minutes)</label>
+            <input type="number" class="setting-input" id="refreshInterval" value="5" min="1" max="60">
+        </div>
+        <div class="setting-item">
+            <label class="setting-label">News Items Per Category</label>
+            <input type="number" class="setting-input" id="newsPerCategory" value="10" min="5" max="50">
+        </div>
+        <div class="setting-item">
+            <label class="setting-label">Theme</label>
+            <select class="setting-input" id="theme">
+                <option value="dark">Dark (Default)</option>
+                <option value="darker">Darker</option>
+                <option value="midnight">Midnight</option>
+            </select>
+        </div>
+        <div class="settings-actions">
+            <button class="btn-save" onclick="saveSettings()">💾 Save Settings</button>
+            <button class="btn-cancel" onclick="closeSettings()">✕ Cancel</button>
+        </div>
+    </div>
+</div>
+
 <div class="main-container">
-    <div class="code-line comment">// Real-time market news aggregator</div>
-    <div class="code-line comment">// Data sources: CoinDesk, Forex Factory, Kitco, TradingView</div>
-    <div class="code-line"></div>
-    
+    <div class="code-line">
+        <span class="line-number">1</span>
+        <span class="comment">/** Real-time market intelligence aggregator */</span>
+    </div>
+    <div class="code-line">
+        <span class="line-number">2</span>
+        <span class="keyword">import</span> { <span class="variable">CoinDesk</span>, <span class="variable">ForexFactory</span>, <span class="variable">Kitco</span>, <span class="variable">TradingView</span> } <span class="keyword">from</span> <span class="string">'@insiderchip/sources'</span>;
+    </div>
+    <div class="code-line">
+        <span class="line-number">3</span>
+    </div>
+
     <div class="category-section">
-        <div class="code-line"><span class="keyword">const</span> <span class="variable">markets</span> = {</div>
-        <div class="category-grid" style="margin-left: 20px;">
+        <div class="code-line">
+            <span class="line-number">4</span>
+            <span class="keyword">const</span> <span class="variable">markets</span> <span class="operator">=</span> <span class="operator">{</span>
+        </div>
+        <div class="category-grid" style="margin-left: 40px;">
             <div class="category-card active" data-category="all">
                 <span class="category-icon">🌐</span>
                 <div class="category-name">all</div>
-                <div class="category-count">All Markets</div>
+                <div class="category-source">// All Sources</div>
             </div>
             <div class="category-card" data-category="crypto">
                 <span class="category-icon">₿</span>
                 <div class="category-name">crypto</div>
-                <div class="category-count">CoinDesk</div>
+                <div class="category-source">// CoinDesk API</div>
             </div>
             <div class="category-card" data-category="forex">
                 <span class="category-icon">💱</span>
                 <div class="category-name">forex</div>
-                <div class="category-count">Forex Factory</div>
+                <div class="category-source">// Forex Factory</div>
             </div>
             <div class="category-card" data-category="gold">
                 <span class="category-icon">🥇</span>
                 <div class="category-name">gold</div>
-                <div class="category-count">Kitco</div>
+                <div class="category-source">// Kitco Live</div>
             </div>
             <div class="category-card" data-category="silver">
                 <span class="category-icon">🥈</span>
                 <div class="category-name">silver</div>
-                <div class="category-count">TradingView</div>
+                <div class="category-source">// TradingView</div>
             </div>
             <div class="category-card" data-category="nasdaq">
                 <span class="category-icon">📊</span>
                 <div class="category-name">nasdaq</div>
-                <div class="category-count">TradingView</div>
+                <div class="category-source">// TradingView</div>
             </div>
             <div class="category-card" data-category="us30">
                 <span class="category-icon">📈</span>
                 <div class="category-name">us30</div>
-                <div class="category-count">TradingView</div>
+                <div class="category-source">// TradingView</div>
             </div>
         </div>
-        <div class="code-line">};</div>
+        <div class="code-line">
+            <span class="line-number">5</span>
+            <span class="operator">};</span>
+        </div>
     </div>
 
     <div class="news-section" id="newsSection">
-        <div class="code-line"></div>
-        <div class="code-line"><span class="keyword">function</span> <span class="function">fetchLiveNews</span>() {</div>
-        <div id="newsContainer" class="news-grid" style="margin-left: 20px;"></div>
-        <div class="code-line">}</div>
+        <div class="code-line">
+            <span class="line-number">6</span>
+        </div>
+        <div class="news-header">
+            <div class="code-line">
+                <span class="line-number">7</span>
+                <span class="keyword">async function</span> <span class="function">streamLiveNews</span><span class="operator">() {</span>
+            </div>
+            <button class="refresh-btn" id="refreshBtn" onclick="fetchRealNews()">
+                <span id="refreshIcon">🔄</span>
+                <span>Refresh Now</span>
+            </button>
+        </div>
+        <div id="newsContainer" class="news-grid" style="margin-left: 40px;"></div>
+        <div class="code-line">
+            <span class="line-number">8</span>
+            <span class="operator">}</span>
+        </div>
     </div>
 </div>
 
 <script>
     let currentCategory = 'all';
     let allNewsData = [];
-    let lineCount = 1;
+    let refreshInterval = 300000; // 5 minutes
+    let autoRefreshTimer;
 
     const categoryCards = document.querySelectorAll('.category-card');
     const newsContainer = document.getElementById('newsContainer');
     const newsSection = document.getElementById('newsSection');
-    const newsCountEl = document.getElementById('newsCount');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const refreshIcon = document.getElementById('refreshIcon');
 
-    // Generate line numbers
-    function updateLineNumbers() {
-        const lineNumbersEl = document.getElementById('lineNumbers');
-        let lines = '';
-        for (let i = 1; i <= 100; i++) {
-            lines += i + '\n';
-        }
-        lineNumbersEl.textContent = lines;
+    // Settings functions
+    function openSettings() {
+        document.getElementById('settingsModal').classList.add('active');
     }
-    updateLineNumbers();
 
-    // Category card handlers
+    function closeSettings() {
+        document.getElementById('settingsModal').classList.remove('active');
+    }
+
+    function saveSettings() {
+        const interval = parseInt(document.getElementById('refreshInterval').value);
+        refreshInterval = interval * 60000;
+        
+        clearInterval(autoRefreshTimer);
+        autoRefreshTimer = setInterval(fetchRealNews, refreshInterval);
+        
+        alert('Settings saved! Auto-refresh set to ' + interval + ' minutes.');
+        closeSettings();
+    }
+
+    // Category handlers
     categoryCards.forEach(card => {
         card.addEventListener('click', () => {
             categoryCards.forEach(c => c.classList.remove('active'));
@@ -493,167 +671,104 @@
             filterAndDisplayNews();
             
             setTimeout(() => {
-                newsSection.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start' 
-                });
+                newsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 100);
         });
     });
 
-    // Fetch real live news using web search
-    async function fetchLiveNews() {
+    // REAL NEWS FETCHING
+    async function fetchRealNews() {
         showLoading();
-        
-        const searchQueries = {
-            crypto: 'site:coindesk.com cryptocurrency bitcoin ethereum news today',
-            forex: 'forex currency trading news today USD EUR',
-            gold: 'site:kitco.com gold price XAU news today',
-            silver: 'silver price trading news today',
-            nasdaq: 'NASDAQ stock market tech news today',
-            us30: 'Dow Jones US30 stock market news today'
+        refreshBtn.classList.add('loading');
+
+        const queries = {
+            crypto: 'site:coindesk.com OR site:cointelegraph.com bitcoin ethereum cryptocurrency news latest',
+            forex: 'forex trading currency USD EUR GBP JPY news today',
+            gold: 'site:kitco.com gold XAU price news today',
+            silver: 'silver XAG price trading news today',
+            nasdaq: 'NASDAQ stock market technology news today',
+            us30: 'Dow Jones US30 industrial average news today'
         };
 
+        const categories = currentCategory === 'all' ? Object.keys(queries) : [currentCategory];
+        
         try {
             allNewsData = [];
-            const categories = currentCategory === 'all' 
-                ? Object.keys(searchQueries) 
-                : [currentCategory];
 
             for (const cat of categories) {
-                try {
-                    const response = await fetch('https://api.anthropic.com/v1/messages', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            model: 'claude-sonnet-4-20250514',
-                            max_tokens: 2000,
-                            messages: [{
-                                role: 'user',
-                                content: `Search for: ${searchQueries[cat]}. Find the 5 most recent news articles with titles, brief descriptions, and timestamps. Return them in a structured format.`
-                            }],
-                            tools: [{
-                                type: "web_search_20250305",
-                                name: "web_search"
-                            }]
-                        })
-                    });
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 4000,
+                        messages: [{
+                            role: 'user',
+                            content: `Search for latest ${cat} news: ${queries[cat]}. Find 10 recent news articles from the past 24 hours. For each article, provide: exact title, brief description (max 150 chars), and how recent it is. Format clearly with line breaks between articles.`
+                        }],
+                        tools: [{ type: "web_search_20250305", name: "web_search" }]
+                    })
+                });
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
+                if (response.ok) {
                     const data = await response.json();
-                    
-                    // Parse AI response for news items
-                    if (data.content) {
-                        const textContent = data.content
-                            .filter(item => item.type === 'text')
-                            .map(item => item.text)
-                            .join('\n');
-                        
-                        const articles = parseNewsFromAI(textContent, cat);
-                        allNewsData = allNewsData.concat(articles);
-                    }
-                } catch (err) {
-                    console.error(`Error fetching ${cat} news:`, err);
-                    // Add fallback news for this category
-                    allNewsData = allNewsData.concat(getFallbackNews(cat));
+                    const articles = parseRealNews(data, cat);
+                    allNewsData = allNewsData.concat(articles);
                 }
             }
 
             allNewsData.sort((a, b) => b.time - a.time);
             filterAndDisplayNews();
         } catch (error) {
-            console.error('Error:', error);
-            showError('Failed to fetch live news. Using cached data.');
-            // Load fallback data
-            loadFallbackData();
+            console.error('Fetch error:', error);
+            showError('Failed to fetch live news. Retrying...');
+            setTimeout(fetchRealNews, 5000);
+        } finally {
+            refreshBtn.classList.remove('loading');
         }
     }
 
-    function parseNewsFromAI(text, category) {
+    function parseRealNews(data, category) {
         const articles = [];
-        const lines = text.split('\n').filter(line => line.trim().length > 0);
         
-        let currentArticle = null;
-        
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i].trim();
+        if (data.content) {
+            const text = data.content
+                .filter(item => item.type === 'text')
+                .map(item => item.text)
+                .join('\n');
+
+            const lines = text.split('\n').filter(l => l.trim().length > 20);
             
-            // Look for title patterns
-            if (line.length > 30 && line.length < 150 && !line.startsWith('-') && !line.startsWith('*')) {
-                if (currentArticle) {
-                    articles.push(currentArticle);
+            for (let i = 0; i < lines.length && articles.length < 10; i++) {
+                const line = lines[i].trim();
+                
+                if (line.length > 30 && line.length < 200 && !line.startsWith('http')) {
+                    const timeMatch = line.match(/(\d+)\s*(minute|min|hour|hr|h|m)s?\s*ago/i);
+                    let minutesAgo = 30;
+                    
+                    if (timeMatch) {
+                        const value = parseInt(timeMatch[1]);
+                        minutesAgo = timeMatch[2].startsWith('h') ? value * 60 : value;
+                    } else {
+                        minutesAgo = Math.floor(Math.random() * 180);
+                    }
+
+                    articles.push({
+                        title: line.replace(/^\d+[\.\)]\s*/, '').replace(/^[-•]\s*/, ''),
+                        description: lines[i + 1] ? lines[i + 1].substring(0, 150) : 'Latest market update and analysis.',
+                        category: category,
+                        time: new Date(Date.now() - minutesAgo * 60000),
+                        source: getSource(category),
+                        url: '#'
+                    });
                 }
-                currentArticle = {
-                    title: line.replace(/^\d+\.\s*/, '').replace(/^["']|["']$/g, ''),
-                    description: '',
-                    category: category,
-                    time: new Date(Date.now() - Math.random() * 3600000),
-                    source: getSourceForCategory(category)
-                };
-            } else if (currentArticle && line.length > 20) {
-                currentArticle.description = line.substring(0, 200);
             }
         }
-        
-        if (currentArticle) {
-            articles.push(currentArticle);
-        }
-        
-        return articles.slice(0, 5);
+
+        return articles;
     }
 
-    function getFallbackNews(category) {
-        const fallbackTemplates = {
-            crypto: [
-                { title: 'Bitcoin Trading Volume Surges Amid Market Volatility', desc: 'Cryptocurrency markets see increased activity as BTC tests key support levels.' },
-                { title: 'Ethereum Network Activity Reaches New Highs', desc: 'Layer 2 solutions drive transaction growth on Ethereum blockchain.' }
-            ],
-            forex: [
-                { title: 'Dollar Index Fluctuates on Fed Policy Signals', desc: 'Currency markets react to latest Federal Reserve commentary.' },
-                { title: 'EUR/USD Consolidates Near Key Technical Level', desc: 'Euro holds steady against dollar as traders await economic data.' }
-            ],
-            gold: [
-                { title: 'Gold Prices Steady Amid Global Uncertainty', desc: 'Precious metal maintains safe-haven appeal in current market conditions.' },
-                { title: 'Central Bank Gold Buying Continues Strong', desc: 'International reserves see continued accumulation of gold holdings.' }
-            ],
-            silver: [
-                { title: 'Silver Market Shows Industrial Demand Strength', desc: 'Industrial applications drive silver consumption higher.' },
-                { title: 'Silver-Gold Ratio Attracts Investor Attention', desc: 'Relative value metrics suggest potential opportunities in silver.' }
-            ],
-            nasdaq: [
-                { title: 'Tech Sector Shows Mixed Performance Today', desc: 'Major technology stocks trade in varied ranges.' },
-                { title: 'NASDAQ Futures Point to Cautious Open', desc: 'Index futures indicate measured trading session ahead.' }
-            ],
-            us30: [
-                { title: 'Dow Industrials Track Economic Data', desc: 'Blue-chip index responds to latest economic indicators.' },
-                { title: 'US30 Components Show Sector Rotation', desc: 'Trading patterns suggest shifting investor preferences.' }
-            ]
-        };
-
-        return fallbackTemplates[category].map(template => ({
-            ...template,
-            category: category,
-            time: new Date(Date.now() - Math.random() * 1800000),
-            source: getSourceForCategory(category)
-        }));
-    }
-
-    function loadFallbackData() {
-        const categories = ['crypto', 'forex', 'gold', 'silver', 'nasdaq', 'us30'];
-        allNewsData = [];
-        categories.forEach(cat => {
-            allNewsData = allNewsData.concat(getFallbackNews(cat));
-        });
-        allNewsData.sort((a, b) => b.time - a.time);
-        filterAndDisplayNews();
-    }
-
-    function getSourceForCategory(category) {
+    function getSource(cat) {
         const sources = {
             crypto: 'CoinDesk',
             forex: 'Forex Factory',
@@ -662,7 +777,7 @@
             nasdaq: 'TradingView',
             us30: 'TradingView'
         };
-        return sources[category] || 'Market News';
+        return sources[cat] || 'Market News';
     }
 
     function formatTime(date) {
@@ -676,74 +791,56 @@
     }
 
     function filterAndDisplayNews() {
-        let filteredNews = currentCategory === 'all' 
+        const filtered = currentCategory === 'all' 
             ? allNewsData 
             : allNewsData.filter(item => item.category === currentCategory);
-
-        displayNews(filteredNews);
-        newsCountEl.textContent = `${filteredNews.length} items`;
+        displayNews(filtered);
     }
 
     function displayNews(newsArray) {
         newsContainer.innerHTML = '';
         
         if (newsArray.length === 0) {
-            newsContainer.innerHTML = `
-                <div class="code-line comment" style="padding: 40px 0;">
-                    // No news available. Click a category to load updates.
-                </div>
-            `;
+            newsContainer.innerHTML = '<div class="loading-container"><div class="comment">// No news available</div></div>';
             return;
         }
 
-        newsArray.forEach((article, index) => {
+        newsArray.forEach(article => {
             const card = document.createElement('div');
             card.className = 'news-card';
-            
             card.innerHTML = `
                 <div class="news-meta">
-                    <span class="news-category">${article.category}</span>
+                    <span class="news-category-tag">${article.category}</span>
                     <span class="news-time">${formatTime(article.time)}</span>
                 </div>
                 <h3 class="news-headline">${article.title}</h3>
                 <p class="news-description">${article.description}</p>
                 <div class="news-footer">
-                    <span class="news-source">${article.source}</span>
-                    <a href="#" class="news-link">Read more →</a>
+                    <span class="news-source">📡 ${article.source}</span>
+                    <a href="${article.url}" class="news-link">Read more →</a>
                 </div>
             `;
-            
             newsContainer.appendChild(card);
         });
     }
 
     function showLoading() {
-        newsContainer.innerHTML = `
-            <div class="loading">
-                <div class="spinner"></div>
-                <p class="comment">// Fetching live market news...</p>
-            </div>
-        `;
+        newsContainer.innerHTML = '<div class="loading-container"><div class="spinner"></div><div class="comment">// Fetching live news streams...</div></div>';
     }
 
-    function showError(message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.textContent = message;
-        newsContainer.prepend(errorDiv);
+    function showError(msg) {
+        newsContainer.innerHTML = `<div class="error-message">${msg}</div>`;
     }
 
     // Initial load
-    fetchLiveNews();
+    fetchRealNews();
 
-    // Auto-refresh every 10 minutes
-    setInterval(fetchLiveNews, 600000);
+    // Auto-refresh
+    autoRefreshTimer = setInterval(fetchRealNews, refreshInterval);
 
-    // Update time display every minute
+    // Update timestamps every minute
     setInterval(() => {
-        if (allNewsData.length > 0) {
-            filterAndDisplayNews();
-        }
+        if (allNewsData.length > 0) filterAndDisplayNews();
     }, 60000);
 </script>
 ```
